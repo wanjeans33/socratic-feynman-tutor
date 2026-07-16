@@ -1,0 +1,4 @@
+interface:
+  display_name: "Socratic Feynman Tutor"
+  short_description: "Diagnose, teach adaptively, and verify durable learning"
+  default_prompt: "Use $socratic-feynman-tutor to diagnose my knowledge, teach with the right intervention, and verify transfer and retention."
