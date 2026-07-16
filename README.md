@@ -1,61 +1,160 @@
 # Socratic Feynman Tutor
 
-An adaptive tutoring skill for Codex that combines Socratic diagnosis with Feynman reconstruction, transfer testing, and delayed retrieval.
+一个面向 Codex 的自适应学习技能：先用苏格拉底式诊断找到真正的知识边界，再选择合适的教学方式，最后通过费曼复述、迁移测试和延迟检索验证学习是否真正发生。
 
-It is designed to optimize for durable, independent ability rather than fluent conversation or short-term recognition.
+它追求的不是“聊得顺畅”或“当场听懂”，而是学习者能够长期、独立地解释、应用和迁移知识。
 
-## What it does
+## 为什么需要这个技能
 
-The tutor runs a four-phase learning loop:
+普通的 AI 教学容易出现两种问题：
 
-1. Map the smallest knowledge gap blocking the learner's goal.
-2. Choose the right intervention: Socratic questions, a direct micro-explanation, a worked example, authentic practice, or retrieval practice.
-3. Verify understanding through unaided reconstruction, boundary tests, and near or far transfer.
-4. Consolidate learning with a retrieval prompt, a transfer task, and a later retention check.
+- 学习者缺少必要的前置知识，AI 却仍然不断追问，让学习变成猜答案；
+- 学习者刚刚复述出一段流畅解释，AI 就宣布“已经掌握”，却没有检查独立应用和长期保持。
 
-The skill explicitly avoids two common failure modes:
+这个技能把苏格拉底提问视为一种有条件的教学工具，而不是所有问题的默认答案。它会根据学习者的实际表现，在提问、直接讲解、示范、真实练习和检索练习之间切换。
 
-- forcing learners to guess when they are missing a prerequisite;
-- declaring mastery from a fluent explanation without independent transfer or delayed retrieval.
+## 四阶段学习流程
 
-## Install
+### 1. 定位知识边界
 
-Ask Codex to install the skill from:
+通过无提示解释、预测、例子或实际操作，找到阻碍学习目标的最小缺口，并判断它属于：
+
+- 缺少事实、定义或前置知识；
+- 概念之间的关系或心智模型有误；
+- 理解原理但不会实际操作；
+- 曾经理解，但现在无法独立提取。
+
+诊断一旦足以选择下一步教学方式就会停止，不会变成冗长的全面考试。
+
+### 2. 选择合适的教学干预
+
+| 学习者状态 | 教学方式 |
+|---|---|
+| 已有必要知识，但概念关系错误 | 苏格拉底提问、预测和反例 |
+| 缺少定义、事实或前置框架 | 直接进行微型讲解 |
+| 理解概念但不会操作 | 示范例题，再让学习者补全 |
+| 目标是写作、编程、计算或设计 | 真实任务与针对性反馈 |
+| 以前学过但无法回忆 | 无提示检索练习 |
+| 内容具有时效性、争议性或高风险 | 先核对可靠来源并标注不确定性 |
+
+如果连续两次提示都没有产生新的有效推理，技能会主动切换方式，避免学习者陷入无效猜测。
+
+### 3. 用费曼重建和迁移验证
+
+学习者需要用自己的话重新构建知识，而不是重复导师刚才的措辞。验证会根据学习目标选择以下任务：
+
+- 面向聪明的初学者进行无术语解释；
+- 补全模糊词语和隐藏步骤；
+- 给出原创例子、类比或演示；
+- 找出反例、成立条件和类比的失效边界；
+- 完成表面不同但结构相近的近迁移任务；
+- 在明显不同的场景中完成远迁移；
+- 对程序性技能提交真实产出，而不是只做口头解释。
+
+### 4. 巩固并延迟验证
+
+每次学习结束时，技能会生成一份简短记录：
+
+- 当前已经独立证明的能力；
+- 仍需提示或尚不稳定的环节；
+- 一个不看笔记即可回答的检索题；
+- 一个新的迁移或实践任务；
+- 建议进行下一次无提示检索的时间。
+
+只有经过一段时间后的无提示检索，知识才会被描述为“已经保持”。尚未进行延迟验证时，技能会明确说明长期保持仍未得到证明。
+
+## 能力证据等级
+
+技能会区分以下证据，不把“见过”或“提示后答对”误判为真正掌握：
+
+1. 识别：能够认出或重复概念；
+2. 辅助使用：在提示下解释或应用；
+3. 独立重建：无提示说明概念及其机制；
+4. 近迁移：解决结构相同、表面不同的问题；
+5. 远迁移：在显著不同的情境中识别并应用原理；
+6. 延迟检索：间隔一段时间后仍能无提示重建或应用。
+
+## 安装
+
+### 方式一：让 Codex 安装
+
+在 Codex 中发送：
 
 ```text
-https://github.com/wanjeans33/socratic-feynman-tutor
+请从 https://github.com/wanjeans33/socratic-feynman-tutor 安装 socratic-feynman-tutor skill。
 ```
 
-Or clone it directly into your Codex skills directory:
+### 方式二：使用 Git 安装
 
-```sh
+macOS 或 Linux：
+
+```bash
 git clone https://github.com/wanjeans33/socratic-feynman-tutor.git ~/.codex/skills/socratic-feynman-tutor
 ```
 
-Start a new Codex task after installation so the skill can be discovered.
+Windows PowerShell：
 
-## Use
-
-Invoke it explicitly:
-
-```text
-Use $socratic-feynman-tutor to teach me backpropagation.
+```powershell
+git clone https://github.com/wanjeans33/socratic-feynman-tutor.git "$env:USERPROFILE\.codex\skills\socratic-feynman-tutor"
 ```
 
-You can also specify an outcome or learning constraint:
+安装后请新建一个 Codex 任务，使技能能够被重新发现。
+
+## 使用方法
+
+直接指定技能和学习主题：
 
 ```text
-Use $socratic-feynman-tutor to help me understand closures well enough to debug JavaScript callbacks. Give direct explanations when I lack a prerequisite, and verify me with a transfer problem.
+请使用 $socratic-feynman-tutor 教我理解反向传播。
 ```
 
-During a session, learner controls include `hint`, `slower`, `harder`, `give me the answer`, `show an example`, `practice mode`, `recap`, and `finish`.
+如果说明实际目标，诊断和迁移任务会更准确：
 
-## 中文简介
+```text
+请使用 $socratic-feynman-tutor 帮我理解 JavaScript 闭包，目标是能够独立排查异步回调中的变量问题。
+```
 
-这是一个面向 Codex 的自适应学习技能。它不会机械地一直追问，而是先诊断学习者的知识边界，再根据问题类型选择苏格拉底提问、直接讲解、示范、真实练习或检索练习。
+也可以指定学习偏好：
 
-验证阶段不仅要求学习者用自己的话解释，还会检查概念边界、近迁移、远迁移和独立完成能力。只有经过延迟检索，才会把知识标记为已经保持。
+```text
+请使用 $socratic-feynman-tutor 教我贝叶斯定理。缺少前置知识时直接讲解，不要让我猜；最后用一个陌生场景测试迁移。
+```
 
-## License
+学习过程中可以使用这些控制指令：
 
-[MIT](LICENSE)
+- `提示` / `hint`
+- `慢一点` / `slower`
+- `难一点` / `harder`
+- `直接告诉我答案`
+- `给我看一个例子`
+- `练习模式`
+- `回顾`
+- `跳过`
+- `结束`
+
+## 适用范围
+
+特别适合：
+
+- 概念理解与错误模型修正；
+- 编程、数学、科学和技术原理学习；
+- 面试复习与知识查漏补缺；
+- 写作、分析、设计等需要真实产出的技能；
+- 检查自己是否只是“感觉听懂了”。
+
+需要注意：这个技能能够改善教学和验证流程，但不能保证模型提供的所有事实天然正确。对于医疗、法律、金融、时效性信息或存在争议的内容，仍应优先核对权威来源。
+
+## 项目结构
+
+```text
+socratic-feynman-tutor/
+├── SKILL.md
+├── agents/
+│   └── openai.yaml
+├── README.md
+└── LICENSE
+```
+
+## 许可证
+
+本项目采用 [MIT License](LICENSE)。欢迎使用、修改和分享。
